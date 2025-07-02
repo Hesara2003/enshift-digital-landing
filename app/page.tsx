@@ -731,7 +731,7 @@ export default function EnshiftDigitalLanding() {
           <motion.div
             className="absolute left-1/4 top-1/2 w-2 h-2 bg-orange-400 rounded-full blur-sm"
             animate={{
-              x: [-100, typeof window !== 'undefined' ? window.innerWidth + 100 : 1200],
+              x: [-100, 1200],
               opacity: [0, 1, 0],
               scale: [0.5, 1, 0.5]
             }}
@@ -745,7 +745,7 @@ export default function EnshiftDigitalLanding() {
           <motion.div
             className="absolute right-1/4 top-1/3 w-1 h-1 bg-blue-400 rounded-full blur-sm"
             animate={{
-              x: [100, typeof window !== 'undefined' ? -window.innerWidth - 100 : -1200],
+              x: [100, -1200],
               opacity: [0, 1, 0],
               scale: [0.3, 0.8, 0.3]
             }}
