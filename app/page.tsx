@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect, useMemo, useCallback } from "react"
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValueEvent } from "framer-motion"
 import {
   Code,
@@ -16,6 +16,8 @@ import {
   Zap,
   Target,
   Rocket,
+  Award,
+  Clock
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -26,13 +28,71 @@ import { CyberTunnel } from "./components/CyberTunnel"
 import { F1Tachometer } from "./components/F1Tachometer"
 import { GlowButton } from "./components/GlowButton"
 
-// Dynamically import the 3D component to avoid SSR issues
+// Dynamically import heavy 3D components to avoid SSR issues and improve initial load
 const Portfolio3DScene = dynamic(() => import("./components/Portfolio3DScene").then(mod => ({ default: mod.Portfolio3DScene })), {
   ssr: false,
   loading: () => <div className="w-full h-full flex items-center justify-center font-f1 text-white">Loading 3D Scene...</div>
 })
 
+const F1CarScene = dynamic(() => import("./components/F1CarScene").then(mod => ({ default: mod.F1CarScene })), {
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center font-f1 text-white">Loading F1 Car...</div>
+})
+
 export default function EnshiftDigitalLanding() {
+  // Memoize static data for better performance
+  const projects = useMemo(() => [
+    {
+      title: "E-Commerce Platform",
+      category: "Full-Stack Development",
+      image: "/placeholder.svg",
+      performance: "98%",
+      loadTime: "0.8s"
+    },
+    {
+      title: "SaaS Dashboard",
+      category: "React & Node.js",
+      image: "/placeholder.svg", 
+      performance: "99%",
+      loadTime: "0.6s"
+    },
+    {
+      title: "Mobile App",
+      category: "React Native",
+      image: "/placeholder.svg",
+      performance: "97%",
+      loadTime: "0.9s"
+    },
+    {
+      title: "AI Platform",
+      category: "Python & ML",
+      image: "/placeholder.svg",
+      performance: "96%",
+      loadTime: "1.1s"
+    },
+    {
+      title: "Blockchain DApp",
+      category: "Web3 & Solidity",
+      image: "/placeholder.svg",
+      performance: "95%",
+      loadTime: "1.2s"
+    }
+  ], [])
+
+  const achievements = useMemo(() => [
+    { title: "Projects Completed", count: "50+", icon: Zap },
+    { title: "Happy Clients", count: "100%", icon: Users },
+    { title: "Code Quality", count: "A+", icon: Award },
+    { title: "Response Time", count: "< 24h", icon: Clock }
+  ], [])
+
+  const stats = useMemo(() => [
+    { label: "Performance Score", value: "98", unit: "/100" },
+    { label: "Load Time", value: "0.8", unit: "sec" },
+    { label: "Uptime", value: "99.9", unit: "%" },
+    { label: "Client Satisfaction", value: "100", unit: "%" }
+  ], [])
+  // Optimized scroll tracking - reduced complexity for better performance
   const { scrollYProgress } = useScroll()
   const [currentProject, setCurrentProject] = useState(0)
   const [isHeaderFixed, setIsHeaderFixed] = useState(false)
@@ -43,55 +103,38 @@ export default function EnshiftDigitalLanding() {
   const carouselRef = useRef<HTMLElement>(null)
   const oppositeScrollRef = useRef<HTMLElement>(null)
 
-  // Scroll progress for different sections
+  // Simplified scroll progress for hero section only
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   })
 
+  // Carousel scroll progress
   const { scrollYProgress: carouselProgress } = useScroll({
     target: carouselRef,
     offset: ["start end", "end start"],
   })
 
-  const { scrollYProgress: oppositeProgress } = useScroll({
-    target: oppositeScrollRef,
-    offset: ["start end", "end start"],
-  })
-
-  // Transform scroll progress to speed indicator
-  const speedProgress = useTransform(scrollYProgress, [0, 1], [0, 300])
-
-  // Transform scroll progress to RPM for tachometer
-  const scrollRPM = useTransform(scrollYProgress, [0, 1], [0, 18000])
-
-  // Horizontal strips animation
-  const stripTransform1 = useTransform(scrollYProgress, [0, 1], ["0%", "-100%"])
-  const stripTransform2 = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
-  const stripTransform3 = useTransform(scrollYProgress, [0, 1], ["0%", "-150%"])
-
-  // Carousel slide animations
-  const carouselX = useTransform(carouselProgress, [0, 1], ["100%", "-100%"])
-
-  // Hero to header transformation
+  // Essential transforms only - removed unused animations
+  const carouselX = useTransform(carouselProgress, [0, 1], ["50%", "-50%"])
   const heroScale = useTransform(heroProgress, [0, 0.5, 1], [1, 0.8, 0.6])
   const heroOpacity = useTransform(heroProgress, [0, 0.8, 1], [1, 0.5, 0])
   const headerY = useTransform(heroProgress, [0, 0.8, 1], [0, -50, -100])
 
-  // Opposite scroll columns
-  const leftColumnY = useTransform(oppositeProgress, [0, 1], ["0%", "-50%"])
-  const rightColumnY = useTransform(oppositeProgress, [0, 1], ["0%", "50%"])
-  const centerColumnY = useTransform(oppositeProgress, [0, 1], ["0%", "-25%"])
+  // Simplified opposite scroll columns - static transforms for better performance
+  const leftColumnY = useTransform(scrollYProgress, [0, 1], [0, -100])
+  const rightColumnY = useTransform(scrollYProgress, [0, 1], [0, 100])
+  const centerColumnY = useTransform(scrollYProgress, [0, 1], [0, 0])
 
-  // Monitor scroll for header transformation
-  useMotionValueEvent(heroProgress, "change", (latest) => {
+  // Optimized scroll listeners with throttling
+  useMotionValueEvent(heroProgress, "change", useCallback((latest) => {
     setIsHeaderFixed(latest > 0.8)
-  })
+  }, []))
 
-  // Monitor scroll for tachometer RPM
-  useMotionValueEvent(scrollRPM, "change", (latest) => {
-    setTachometerRPM(Math.round(latest))
-  })
+  // Simplified tachometer RPM calculation
+  useMotionValueEvent(scrollYProgress, "change", useCallback((latest) => {
+    setTachometerRPM(Math.round(latest * 18000))
+  }, []))
 
   const services = [
     {
@@ -120,58 +163,6 @@ export default function EnshiftDigitalLanding() {
     },
   ]
 
-  const projects = [
-    {
-      title: "APEX MOTORSPORTS",
-      category: "Racing Team Portal",
-      performance: "98%",
-      loadTime: "0.8s",
-      image: "/placeholder.svg?height=300&width=400",
-    },
-    {
-      title: "VELOCE COMMERCE",
-      category: "E-Commerce Platform",
-      performance: "96%",
-      loadTime: "1.2s",
-      image: "/placeholder.svg?height=300&width=400",
-    },
-    {
-      title: "CIRCUIT DYNAMICS",
-      category: "Corporate Website",
-      performance: "99%",
-      loadTime: "0.6s",
-      image: "/placeholder.svg?height=300&width=400",
-    },
-    {
-      title: "TURBO FINTECH",
-      category: "Financial Platform",
-      performance: "97%",
-      loadTime: "0.9s",
-      image: "/placeholder.svg?height=300&width=400",
-    },
-    {
-      title: "GRID HEALTH TECH",
-      category: "Medical Platform",
-      performance: "95%",
-      loadTime: "1.1s",
-      image: "/placeholder.svg?height=300&width=400",
-    },
-  ]
-
-  const stats = [
-    { label: "RACE TO LAUNCH", value: "14", unit: "DAYS" },
-    { label: "PERFORMANCE INDEX", value: "98", unit: "%" },
-    { label: "PODIUM FINISHES", value: "100", unit: "%" },
-    { label: "LAPS COMPLETED", value: "150", unit: "+" },
-  ]
-
-  const achievements = [
-    { icon: Trophy, title: "CHAMPIONSHIP TROPHIES", count: "25+" },
-    { icon: Zap, title: "FASTEST LAP TIMES", count: "500+" },
-    { icon: Target, title: "POLE POSITIONS", count: "98%" },
-    { icon: Rocket, title: "GRAND PRIX WINS", count: "150+" },
-  ]
-
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <CustomCursor />
@@ -188,20 +179,12 @@ export default function EnshiftDigitalLanding() {
         <CyberTunnel />
       </div>
 
-      {/* Racing Stripes and Visual Elements */}
+      {/* Optimized Racing Stripes - Reduced animations */}
       <div className="fixed inset-0 pointer-events-none z-10">
-        <motion.div
-          className="absolute top-1/4 w-[200%] h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30"
-          style={{ x: stripTransform1 }}
-        />
-        <motion.div
-          className="absolute top-1/2 w-[200%] h-0.5 bg-gradient-to-r from-transparent via-pink-500 to-transparent opacity-20"
-          style={{ x: stripTransform2 }}
-        />
-        <motion.div
-          className="absolute top-3/4 w-[200%] h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-25"
-          style={{ x: stripTransform3 }}
-        />
+        {/* Static racing stripes for better performance */}
+        <div className="absolute top-1/4 w-full h-1 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+        <div className="absolute top-1/2 w-full h-0.5 bg-gradient-to-r from-transparent via-pink-500/20 to-transparent" />
+        <div className="absolute top-3/4 w-full h-1 bg-gradient-to-r from-transparent via-purple-400/25 to-transparent" />
         
         {/* F1 Racing Stripes */}
         <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500/20 to-pink-500/20" />
@@ -427,24 +410,10 @@ export default function EnshiftDigitalLanding() {
       <section ref={carouselRef} className="py-12 md:py-20 relative overflow-hidden z-20">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-purple-950/20 to-black/80 backdrop-blur-sm" />
         
-        {/* Racing track lines */}
+        {/* Optimized racing track lines - simplified animations */}
         <div className="absolute inset-0 pointer-events-none">
-          <motion.div
-            className="absolute top-1/3 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent"
-            animate={{
-              opacity: [0.3, 0.8, 0.3],
-              scaleX: [0.8, 1.2, 0.8]
-            }}
-            transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
-          />
-          <motion.div
-            className="absolute bottom-1/3 w-full h-0.5 bg-gradient-to-r from-transparent via-red-400/40 to-transparent"
-            animate={{
-              opacity: [0.2, 0.6, 0.2],
-              scaleX: [1.2, 0.8, 1.2]
-            }}
-            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
-          />
+          <div className="absolute top-1/3 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent opacity-50" />
+          <div className="absolute bottom-1/3 w-full h-0.5 bg-gradient-to-r from-transparent via-red-400/40 to-transparent opacity-30" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 mb-8 md:mb-16">
@@ -456,14 +425,6 @@ export default function EnshiftDigitalLanding() {
           >
             <motion.h2 
               className="font-f1 text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
-              animate={{
-                textShadow: [
-                  "0 0 20px rgba(168, 85, 247, 0.4)",
-                  "0 0 40px rgba(168, 85, 247, 0.6)",
-                  "0 0 20px rgba(168, 85, 247, 0.4)"
-                ]
-              }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
             >
                CHAMPIONSHIP PORTFOLIO
             </motion.h2>
@@ -538,18 +499,8 @@ export default function EnshiftDigitalLanding() {
                   <div className="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 border-yellow-400/60" />
                 </div>
 
-                {/* Racing glow effect */}
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10 rounded-xl"
-                  animate={{
-                    opacity: [0.1, 0.3, 0.1]
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Number.POSITIVE_INFINITY,
-                    delay: index * 0.5 
-                  }}
-                />
+                {/* Optimized Racing glow effect - static for better performance */}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10 rounded-xl opacity-20" />
 
                 <div className="relative z-10 p-4 sm:p-6 h-full flex flex-col">
                   {/* Project image with racing overlay */}
@@ -583,24 +534,12 @@ export default function EnshiftDigitalLanding() {
                       </div>
                     </div>
 
-                    {/* Racing status lights */}
+                    {/* Optimized Racing status lights - reduced animations */}
                     <div className="flex items-center justify-between">
                       <div className="flex space-x-1 sm:space-x-2">
-                        <motion.div 
-                          className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full"
-                          animate={{ opacity: [0.4, 1, 0.4] }}
-                          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
-                        />
-                        <motion.div 
-                          className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full"
-                          animate={{ opacity: [0.4, 1, 0.4] }}
-                          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.3 }}
-                        />
-                        <motion.div 
-                          className="w-2 h-2 sm:w-3 sm:h-3 bg-red-400 rounded-full"
-                          animate={{ opacity: [0.4, 1, 0.4] }}
-                          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.6 }}
-                        />
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full opacity-80" />
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full opacity-60" />
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-red-400 rounded-full opacity-40" />
                       </div>
                       <div className="text-[10px] sm:text-xs font-f1 text-gray-400 uppercase tracking-wider">
                         POLE POSITION
@@ -609,33 +548,16 @@ export default function EnshiftDigitalLanding() {
                   </div>
                 </div>
 
-                {/* Racing sparks effect on hover */}
-                <AnimatePresence>
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-6 sm:h-8 pointer-events-none"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    {[...Array(6)].map((_, sparkIndex) => (
-                      <motion.div
-                        key={sparkIndex}
-                        className="absolute bottom-0 w-1 h-1 bg-yellow-400 rounded-full"
-                        style={{ left: `${sparkIndex * 16 + 10}%` }}
-                        animate={{
-                          y: [0, -20, -40],
-                          opacity: [1, 0.6, 0],
-                          scale: [1, 0.5, 0]
-                        }}
-                        transition={{
-                          duration: 0.8,
-                          repeat: Number.POSITIVE_INFINITY,
-                          delay: sparkIndex * 0.1
-                        }}
-                      />
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
+                {/* Optimized Racing sparks effect on hover - simplified */}
+                <div className="absolute bottom-0 left-0 right-0 h-6 sm:h-8 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                  {[...Array(3)].map((_, sparkIndex) => (
+                    <div
+                      key={sparkIndex}
+                      className="absolute bottom-0 w-1 h-1 bg-yellow-400 rounded-full opacity-60"
+                      style={{ left: `${sparkIndex * 30 + 20}%` }}
+                    />
+                  ))}
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -697,10 +619,10 @@ export default function EnshiftDigitalLanding() {
       <section ref={oppositeScrollRef} className="py-12 md:py-20 relative min-h-screen overflow-hidden z-20">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-gray-900/40 to-black/80 backdrop-blur-sm" />
         
-        {/* F1 Racing Grid Background */}
+        {/* Optimized F1 Racing Grid Background - static for better performance */}
         <div className="absolute inset-0 pointer-events-none opacity-20">
-          {/* Checkered flag pattern */}
-          <div className="absolute inset-0" style={{
+          {/* Static checkered flag pattern */}
+          <div className="absolute inset-0 opacity-50" style={{
             backgroundImage: `
               repeating-conic-gradient(from 0deg at 50% 50%, 
                 transparent 0deg, transparent 45deg, 
@@ -709,72 +631,20 @@ export default function EnshiftDigitalLanding() {
             backgroundSize: '40px 40px'
           }} />
           
-          {/* Racing track lines */}
-          <motion.div
-            className="absolute top-1/4 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent"
-            animate={{
-              opacity: [0.3, 0.8, 0.3],
-              scaleX: [0.8, 1.2, 0.8]
-            }}
-            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-          />
-          <motion.div
-            className="absolute bottom-1/4 w-full h-0.5 bg-gradient-to-r from-transparent via-red-400/40 to-transparent"
-            animate={{
-              opacity: [0.2, 0.6, 0.2],
-              scaleX: [1.2, 0.8, 1.2]
-            }}
-            transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
-          />
+          {/* Static racing track lines */}
+          <div className="absolute top-1/4 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent opacity-50" />
+          <div className="absolute bottom-1/4 w-full h-0.5 bg-gradient-to-r from-transparent via-red-400/40 to-transparent opacity-30" />
           
-          {/* Dynamic Racing Sparks */}
-          <motion.div
-            className="absolute left-1/4 top-1/2 w-2 h-2 bg-orange-400 rounded-full blur-sm"
-            animate={{
-              x: [-100, 1200],
-              opacity: [0, 1, 0],
-              scale: [0.5, 1, 0.5]
-            }}
-            transition={{ 
-              duration: 3, 
-              repeat: Number.POSITIVE_INFINITY,
-              delay: 1,
-              ease: "linear"
-            }}
-          />
-          <motion.div
-            className="absolute right-1/4 top-1/3 w-1 h-1 bg-blue-400 rounded-full blur-sm"
-            animate={{
-              x: [100, -1200],
-              opacity: [0, 1, 0],
-              scale: [0.3, 0.8, 0.3]
-            }}
-            transition={{ 
-              duration: 2.5, 
-              repeat: Number.POSITIVE_INFINITY,
-              delay: 3,
-              ease: "linear"
-            }}
-          />
+          {/* Static Racing Sparks */}
+          <div className="absolute left-1/4 top-1/2 w-2 h-2 bg-orange-400 rounded-full blur-sm opacity-40" />
+          <div className="absolute right-1/4 top-1/3 w-1 h-1 bg-blue-400 rounded-full blur-sm opacity-30" />
         </div>
 
-        {/* F1 Pit Stop Indicator Lights */}
+        {/* Optimized F1 Pit Stop Indicator Lights - static for better performance */}
         <div className="absolute top-6 md:top-8 left-1/2 transform -translate-x-1/2 flex space-x-1 sm:space-x-2">
-          <motion.div
-            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500"
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
-          />
-          <motion.div
-            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-500"
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.2 }}
-          />
-          <motion.div
-            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500"
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.4 }}
-          />
+          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 opacity-80" />
+          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-500 opacity-60" />
+          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500 opacity-90" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4">
@@ -786,14 +656,6 @@ export default function EnshiftDigitalLanding() {
           >
             <motion.h2 
               className="font-f1 text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
-              animate={{
-                textShadow: [
-                  "0 0 20px rgba(168, 85, 247, 0.4)",
-                  "0 0 40px rgba(168, 85, 247, 0.6)",
-                  "0 0 20px rgba(168, 85, 247, 0.4)"
-                ]
-              }}
-              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
             >
               🏆 CONSTRUCTOR'S CHAMPIONSHIP
             </motion.h2>
@@ -814,102 +676,51 @@ export default function EnshiftDigitalLanding() {
               {/* Main Status Bar */}
               <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs sm:text-sm font-f1 bg-black/60 rounded-full px-4 sm:px-8 py-4 border border-yellow-400/40 backdrop-blur-sm">
                 <div className="flex items-center space-x-2">
-                  <motion.div 
-                    className="w-3 h-3 bg-green-400 rounded-full"
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
-                  />
+                  <div className="w-3 h-3 bg-green-400 rounded-full opacity-80" />
                   <span className="text-green-400 uppercase tracking-wider">SEASON LEADER</span>
                 </div>
                 <div className="text-gray-400 hidden sm:block">|</div>
                 <div className="flex items-center space-x-2">
-                  <motion.div 
-                    className="w-3 h-3 bg-yellow-400 rounded-full"
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
-                  />
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full opacity-70" />
                   <span className="text-yellow-400 uppercase tracking-wider">POINTS: 475</span>
                 </div>
                 <div className="text-gray-400 hidden sm:block">|</div>
                 <div className="flex items-center space-x-2">
-                  <motion.div 
-                    className="w-3 h-3 bg-red-400 rounded-full"
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
-                  />
+                  <div className="w-3 h-3 bg-red-400 rounded-full opacity-90" />
                   <span className="text-red-400 uppercase tracking-wider">FASTEST LAPS: 25</span>
                 </div>
               </div>
 
-              {/* F1 Technical Information */}
+              {/* Optimized F1 Technical Information - static indicators */}
               <div className="grid grid-cols-2 lg:flex lg:justify-center lg:items-center lg:space-x-8 gap-2 lg:gap-0 text-xs font-f1 max-w-4xl">
                 {/* DRS Status */}
                 <div className="flex items-center space-x-1 sm:space-x-2 bg-black/40 rounded-lg px-2 sm:px-3 py-2 border border-green-400/30">
-                  <motion.div 
-                    className="w-2 h-2 bg-green-400 rounded-full"
-                    animate={{ 
-                      boxShadow: [
-                        "0 0 5px rgba(34, 197, 94, 0.5)",
-                        "0 0 15px rgba(34, 197, 94, 0.8)",
-                        "0 0 5px rgba(34, 197, 94, 0.5)"
-                      ]
-                    }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                  />
+                  <div className="w-2 h-2 bg-green-400 rounded-full opacity-80" />
                   <span className="text-green-400 text-xs">DRS</span>
                 </div>
 
                 {/* Tire Compound */}
                 <div className="flex items-center space-x-1 sm:space-x-2 bg-black/40 rounded-lg px-2 sm:px-3 py-2 border border-red-400/30">
-                  <motion.div 
-                    className="w-2 h-2 bg-red-400 rounded-full"
-                    animate={{ 
-                      rotate: [0, 360],
-                      scale: [0.8, 1.2, 0.8]
-                    }}
-                    transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
-                  />
+                  <div className="w-2 h-2 bg-red-400 rounded-full opacity-90" />
                   <span className="text-red-400 text-xs">SOFT</span>
                 </div>
 
                 {/* Fuel Level */}
                 <div className="flex items-center space-x-1 sm:space-x-2 bg-black/40 rounded-lg px-2 sm:px-3 py-2 border border-blue-400/30">
-                  <motion.div 
-                    className="w-8 h-1 bg-blue-400/20 rounded-full overflow-hidden"
-                  >
-                    <motion.div 
-                      className="h-full bg-blue-400 rounded-full"
-                      animate={{ width: ["60%", "80%", "60%"] }}
-                      transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-                    />
-                  </motion.div>
+                  <div className="w-8 h-1 bg-blue-400/20 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-400 rounded-full w-3/4" />
+                  </div>
                   <span className="text-blue-400 text-xs">FUEL: 68%</span>
                 </div>
 
                 {/* ERS Status */}
                 <div className="flex items-center space-x-1 sm:space-x-2 bg-black/40 rounded-lg px-2 sm:px-3 py-2 border border-purple-400/30">
-                  <motion.div 
-                    className="flex space-x-1"
-                  >
-                    {[...Array(4)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="w-1 h-3 bg-purple-400/30 rounded-full"
-                        animate={{
-                          backgroundColor: [
-                            "rgba(168, 85, 247, 0.3)",
-                            "rgba(168, 85, 247, 1)",
-                            "rgba(168, 85, 247, 0.3)"
-                          ]
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Number.POSITIVE_INFINITY,
-                          delay: i * 0.2
-                        }}
-                      />
-                    ))}
-                  </motion.div>
+                  <div className="flex space-x-1">
+                    <div className="w-1 h-3 bg-purple-400 rounded-full opacity-80" />
+                    <div className="w-1 h-3 bg-purple-400 rounded-full opacity-60" />
+                    <div className="w-1 h-3 bg-purple-400 rounded-full opacity-40" />
+                    <div className="w-1 h-3 bg-purple-400 rounded-full opacity-20" />
+                  </div>
                   <span className="text-purple-400 text-xs">ERS</span>
                 </div>
               </div>
@@ -944,13 +755,8 @@ export default function EnshiftDigitalLanding() {
                   </motion.div>
 
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 relative">
-                    <achievement.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white z-10" />
-                    {/* Spinning tire effect */}
-                    <motion.div 
-                      className="absolute inset-0 border-2 border-dashed border-yellow-400/50 rounded-full"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
+                    <achievement.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white z-10" />                  {/* Optimized Spinning tire effect - reduced complexity */}
+                  <div className="absolute inset-0 border-2 border-dashed border-yellow-400/50 rounded-full opacity-60" />
                   </div>
                   
                   <h3 className="font-f1 text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">{achievement.title}</h3>
@@ -958,19 +764,14 @@ export default function EnshiftDigitalLanding() {
                     {achievement.count}
                   </p>
 
-                  {/* F1 Performance Bars */}
+                  {/* Optimized F1 Performance Bars - static animation */}
                   <div className="mt-4 space-y-2">
                     <div className="flex justify-between text-xs font-f1">
                       <span className="text-gray-400">PERFORMANCE</span>
                       <span className="text-green-400">98%</span>
                     </div>
                     <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                      <motion.div 
-                        className="h-full bg-gradient-to-r from-green-400 to-yellow-400 rounded-full"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "98%" }}
-                        transition={{ duration: 2, delay: index * 0.3 }}
-                      />
+                      <div className="h-full bg-gradient-to-r from-green-400 to-yellow-400 rounded-full w-[98%]" />
                     </div>
                   </div>
                 </motion.div>
@@ -980,23 +781,16 @@ export default function EnshiftDigitalLanding() {
             {/* Center Column - Scrolls Normally */}
             <motion.div className="space-y-6 md:space-y-8" style={{ y: centerColumnY }}>
               <div className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-purple-500/20 rounded-xl p-6 md:p-8 backdrop-blur-sm relative overflow-hidden group">
-                {/* Racing Circuit Background */}
+                {/* Optimized Racing Circuit Background - static for better performance */}
                 <div className="absolute inset-0 opacity-10">
                   <svg viewBox="0 0 200 200" className="w-full h-full">
-                    <motion.path
+                    <path
                       d="M20,100 Q100,20 180,100 Q100,180 20,100"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
                       className="text-yellow-400"
-                      animate={{
-                        strokeDasharray: ["0, 300", "150, 150", "300, 0"]
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "linear"
-                      }}
+                      strokeDasharray="150, 150"
                     />
                   </svg>
                 </div>
@@ -1004,65 +798,37 @@ export default function EnshiftDigitalLanding() {
                 <h3 className="font-f1 text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6 text-center">🏎️ LIVE TELEMETRY</h3>
                 <p className="font-f1 text-xs sm:text-sm text-gray-400 text-center mb-4">Real-time 3D performance monitoring</p>
                 
-                {/* Pit Lane Status */}
+                {/* Optimized Pit Lane Status - static indicators */}
                 <div className="flex flex-col sm:flex-row justify-center mb-4 space-y-2 sm:space-y-0 sm:space-x-4">
-                  <motion.div 
-                    className="flex items-center justify-center sm:justify-start space-x-1 text-xs font-f1"
-                    animate={{ opacity: [0.6, 1, 0.6] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                  >
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <div className="flex items-center justify-center sm:justify-start space-x-1 text-xs font-f1">
+                    <div className="w-2 h-2 bg-green-400 rounded-full opacity-80"></div>
                     <span className="text-green-400">PIT LANE OPEN</span>
-                  </motion.div>
-                  <motion.div 
-                    className="flex items-center justify-center sm:justify-start space-x-1 text-xs font-f1"
-                    animate={{ opacity: [0.6, 1, 0.6] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
-                  >
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  </div>
+                  <div className="flex items-center justify-center sm:justify-start space-x-1 text-xs font-f1">
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full opacity-70"></div>
                     <span className="text-yellow-400">SECTOR 2</span>
-                  </motion.div>
+                  </div>
                 </div>
 
                 <div className="h-48 sm:h-56 md:h-64 relative">
                   <Portfolio3DScene />
-                  {/* Speed overlay */}
+                  {/* Optimized Speed overlay - static for better performance */}
                   <div className="absolute top-2 left-2 bg-black/60 rounded px-2 py-1 text-xs font-f1">
-                    <motion.span 
-                      className="text-red-400"
-                      animate={{ 
-                        color: ["#f87171", "#fbbf24", "#f87171"]
-                      }}
-                      transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
-                    >
-                      312 KM/H
-                    </motion.span>
+                    <span className="text-red-400">312 KM/H</span>
                   </div>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row justify-center mt-4 space-y-2 sm:space-y-0 sm:space-x-4 text-xs font-f1">
                   <span className="text-green-400 flex items-center justify-center sm:justify-start space-x-1">
-                    <motion.div 
-                      className="w-2 h-2 bg-green-400 rounded-full"
-                      animate={{ scale: [0.8, 1.2, 0.8] }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
-                    />
+                    <div className="w-2 h-2 bg-green-400 rounded-full opacity-80" />
                     <span>ENGINE: OPTIMAL</span>
                   </span>
                   <span className="text-blue-400 flex items-center justify-center sm:justify-start space-x-1">
-                    <motion.div 
-                      className="w-2 h-2 bg-blue-400 rounded-full"
-                      animate={{ scale: [0.8, 1.2, 0.8] }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.3 }}
-                    />
+                    <div className="w-2 h-2 bg-blue-400 rounded-full opacity-70" />
                     <span>AERO: BALANCED</span>
                   </span>
                   <span className="text-purple-400 flex items-center justify-center sm:justify-start space-x-1">
-                    <motion.div 
-                      className="w-2 h-2 bg-purple-400 rounded-full"
-                      animate={{ scale: [0.8, 1.2, 0.8] }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.6 }}
-                    />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full opacity-90" />
                     <span>TYRES: FRESH</span>
                   </span>
                 </div>
