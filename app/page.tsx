@@ -424,7 +424,7 @@ export default function EnshiftDigitalLanding() {
       </section>
 
       {/* Horizontal Carousel Section */}
-      <section ref={carouselRef} className="py-20 relative overflow-hidden z-20">
+      <section ref={carouselRef} className="py-12 md:py-20 relative overflow-hidden z-20">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-purple-950/20 to-black/80 backdrop-blur-sm" />
         
         {/* Racing track lines */}
@@ -447,7 +447,7 @@ export default function EnshiftDigitalLanding() {
           />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 mb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 mb-8 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -455,7 +455,7 @@ export default function EnshiftDigitalLanding() {
             className="text-center"
           >
             <motion.h2 
-              className="font-f1 text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
+              className="font-f1 text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
               animate={{
                 textShadow: [
                   "0 0 20px rgba(168, 85, 247, 0.4)",
@@ -467,15 +467,15 @@ export default function EnshiftDigitalLanding() {
             >
                CHAMPIONSHIP PORTFOLIO
             </motion.h2>
-            <p className="font-f1 text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+            <p className="font-f1 text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6 md:mb-8">
               🏆 Victory lap showcase - projects that conquered the digital circuit
-              <br />
-              🚀 Each build engineered for pole position performance
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>🚀 Each build engineered for pole position performance
             </p>
             
             {/* Racing stats bar */}
             <motion.div 
-              className="flex justify-center items-center space-x-8 text-sm font-f1 bg-black/40 rounded-full px-6 py-3 border border-yellow-400/30"
+              className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-8 text-xs sm:text-sm font-f1 bg-black/40 rounded-full px-4 sm:px-6 py-3 border border-yellow-400/30 max-w-4xl mx-auto"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -498,19 +498,19 @@ export default function EnshiftDigitalLanding() {
         </div>
 
         {/* F1 Racing Carousel */}
-        <div className="relative h-96 overflow-hidden">
+        <div className="relative h-80 md:h-96 overflow-hidden">
           {/* Racing track ground effect */}
           <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-gray-800 via-gray-600 to-gray-800 opacity-60" />
           <div className="absolute bottom-0 left-1/4 right-1/4 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent" />
           
           <motion.div 
-            className="flex space-x-8 absolute top-0" 
+            className="flex space-x-4 md:space-x-8 absolute top-0" 
             style={{ x: carouselX }}
           >
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                className="flex-shrink-0 w-80 h-80 relative overflow-hidden backdrop-blur-sm group"
+                className="flex-shrink-0 w-72 sm:w-80 h-72 sm:h-80 relative overflow-hidden backdrop-blur-sm group"
                 initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
                 whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
                 whileHover={{ 
@@ -551,9 +551,9 @@ export default function EnshiftDigitalLanding() {
                   }}
                 />
 
-                <div className="relative z-10 p-6 h-full flex flex-col">
+                <div className="relative z-10 p-4 sm:p-6 h-full flex flex-col">
                   {/* Project image with racing overlay */}
-                  <div className="w-full h-40 bg-gray-800 rounded-lg mb-4 overflow-hidden relative group-hover:scale-105 transition-transform duration-300">
+                  <div className="w-full h-32 sm:h-40 bg-gray-800 rounded-lg mb-3 sm:mb-4 overflow-hidden relative group-hover:scale-105 transition-transform duration-300">
                     <img
                       src={project.image || "/placeholder.svg"}
                       alt={project.title}
@@ -561,48 +561,48 @@ export default function EnshiftDigitalLanding() {
                     />
                     {/* Racing grid overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute top-2 right-2 bg-black/70 rounded-full px-2 py-1 text-xs font-f1 text-yellow-400">
+                    <div className="absolute top-1 sm:top-2 right-1 sm:right-2 bg-black/70 rounded-full px-2 py-1 text-xs font-f1 text-yellow-400">
                       PROJECT #{index + 1}
                     </div>
                   </div>
 
                   {/* Project info with F1 styling */}
                   <div className="flex-1">
-                    <h3 className="font-f1 text-xl font-bold text-white mb-2 tracking-wider">{project.title}</h3>
-                    <p className="font-f1 text-purple-400 mb-4 uppercase text-sm tracking-wide">{project.category}</p>
+                    <h3 className="font-f1 text-lg sm:text-xl font-bold text-white mb-2 tracking-wider leading-tight">{project.title}</h3>
+                    <p className="font-f1 text-purple-400 mb-3 sm:mb-4 uppercase text-xs sm:text-sm tracking-wide">{project.category}</p>
                     
                     {/* F1-style telemetry data */}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="bg-black/50 rounded-lg p-3 border border-green-400/30">
-                        <div className="text-xs text-green-400 font-f1 mb-1">PERFORMANCE</div>
-                        <div className="text-lg font-bold text-green-400 font-mono">{project.performance}</div>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-3 sm:mb-4">
+                      <div className="bg-black/50 rounded-lg p-2 sm:p-3 border border-green-400/30">
+                        <div className="text-[10px] sm:text-xs text-green-400 font-f1 mb-1">PERFORMANCE</div>
+                        <div className="text-sm sm:text-lg font-bold text-green-400 font-mono">{project.performance}</div>
                       </div>
-                      <div className="bg-black/50 rounded-lg p-3 border border-blue-400/30">
-                        <div className="text-xs text-blue-400 font-f1 mb-1">LOAD TIME</div>
-                        <div className="text-lg font-bold text-blue-400 font-mono">{project.loadTime}</div>
+                      <div className="bg-black/50 rounded-lg p-2 sm:p-3 border border-blue-400/30">
+                        <div className="text-[10px] sm:text-xs text-blue-400 font-f1 mb-1">LOAD TIME</div>
+                        <div className="text-sm sm:text-lg font-bold text-blue-400 font-mono">{project.loadTime}</div>
                       </div>
                     </div>
 
                     {/* Racing status lights */}
                     <div className="flex items-center justify-between">
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-1 sm:space-x-2">
                         <motion.div 
-                          className="w-3 h-3 bg-green-400 rounded-full"
+                          className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full"
                           animate={{ opacity: [0.4, 1, 0.4] }}
                           transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
                         />
                         <motion.div 
-                          className="w-3 h-3 bg-yellow-400 rounded-full"
+                          className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full"
                           animate={{ opacity: [0.4, 1, 0.4] }}
                           transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.3 }}
                         />
                         <motion.div 
-                          className="w-3 h-3 bg-red-400 rounded-full"
+                          className="w-2 h-2 sm:w-3 sm:h-3 bg-red-400 rounded-full"
                           animate={{ opacity: [0.4, 1, 0.4] }}
                           transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.6 }}
                         />
                       </div>
-                      <div className="text-xs font-f1 text-gray-400 uppercase tracking-wider">
+                      <div className="text-[10px] sm:text-xs font-f1 text-gray-400 uppercase tracking-wider">
                         POLE POSITION
                       </div>
                     </div>
@@ -612,7 +612,7 @@ export default function EnshiftDigitalLanding() {
                 {/* Racing sparks effect on hover */}
                 <AnimatePresence>
                   <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-8 pointer-events-none"
+                    className="absolute bottom-0 left-0 right-0 h-6 sm:h-8 pointer-events-none"
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -643,20 +643,20 @@ export default function EnshiftDigitalLanding() {
 
         {/* F1 Race completion indicator */}
         <motion.div 
-          className="relative z-10 max-w-7xl mx-auto px-4 mt-12"
+          className="relative z-10 max-w-7xl mx-auto px-4 mt-8 md:mt-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
         >
           <div className="flex justify-center">
-            <div className="bg-black/60 rounded-full px-8 py-4 border border-yellow-400/30 backdrop-blur-sm">
-              <div className="flex items-center space-x-4 font-f1 text-sm">
+            <div className="bg-black/60 rounded-full px-4 sm:px-8 py-3 sm:py-4 border border-yellow-400/30 backdrop-blur-sm">
+              <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 font-f1 text-xs sm:text-sm">
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full animate-pulse" />
                   <span className="text-green-400">ALL PROJECTS: RACE COMPLETE</span>
                 </div>
-                <div className="text-gray-400">|</div>
+                <div className="text-gray-400 hidden sm:block">|</div>
                 <div className="text-yellow-400 uppercase tracking-wider">
                   🏆 CHAMPIONSHIP STATUS: ACTIVE
                 </div>
@@ -667,7 +667,7 @@ export default function EnshiftDigitalLanding() {
       </section>
 
       {/* Services Section - 3D Pit Stop */}
-      <section id="services" className="py-20 relative min-h-screen z-20">
+      <section id="services" className="py-12 md:py-20 relative min-h-[60vh] md:min-h-screen z-20">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-purple-950/20 to-black/80 backdrop-blur-sm" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4">
@@ -675,19 +675,19 @@ export default function EnshiftDigitalLanding() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8 md:mb-16"
           >
-            <h2 className="font-f1 text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider">
+            <h2 className="font-f1 text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider">
               🔧 PIT CREW MASTERY
             </h2>
-            <p className="font-f1 text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+            <p className="font-f1 text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6 md:mb-8 px-4">
               ⚡ Explore our precision pit stop operations - each station engineered for championship performance
-              <br />
-              🏎️ Click on different stations to discover our racing-grade services
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>🏎️ Click on different stations to discover our racing-grade services
             </p>
           </motion.div>
 
-          <div className="h-[600px] relative">
+          <div className="h-[400px] sm:h-[500px] lg:h-[600px] relative">
             <PitStopScene />
           </div>
         </div>
