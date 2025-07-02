@@ -694,7 +694,7 @@ export default function EnshiftDigitalLanding() {
       </section>
 
       {/* Opposite Scroll Section */}
-      <section ref={oppositeScrollRef} className="py-20 relative min-h-screen overflow-hidden z-20">
+      <section ref={oppositeScrollRef} className="py-12 md:py-20 relative min-h-screen overflow-hidden z-20">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-gray-900/40 to-black/80 backdrop-blur-sm" />
         
         {/* F1 Racing Grid Background */}
@@ -731,7 +731,7 @@ export default function EnshiftDigitalLanding() {
           <motion.div
             className="absolute left-1/4 top-1/2 w-2 h-2 bg-orange-400 rounded-full blur-sm"
             animate={{
-              x: [-100, window.innerWidth + 100],
+              x: [-100, typeof window !== 'undefined' ? window.innerWidth + 100 : 1200],
               opacity: [0, 1, 0],
               scale: [0.5, 1, 0.5]
             }}
@@ -745,7 +745,7 @@ export default function EnshiftDigitalLanding() {
           <motion.div
             className="absolute right-1/4 top-1/3 w-1 h-1 bg-blue-400 rounded-full blur-sm"
             animate={{
-              x: [100, -window.innerWidth - 100],
+              x: [100, typeof window !== 'undefined' ? -window.innerWidth - 100 : -1200],
               opacity: [0, 1, 0],
               scale: [0.3, 0.8, 0.3]
             }}
@@ -759,19 +759,19 @@ export default function EnshiftDigitalLanding() {
         </div>
 
         {/* F1 Pit Stop Indicator Lights */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        <div className="absolute top-6 md:top-8 left-1/2 transform -translate-x-1/2 flex space-x-1 sm:space-x-2">
           <motion.div
-            className="w-3 h-3 rounded-full bg-red-500"
+            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500"
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
           />
           <motion.div
-            className="w-3 h-3 rounded-full bg-yellow-500"
+            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-500"
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.2 }}
           />
           <motion.div
-            className="w-3 h-3 rounded-full bg-green-500"
+            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500"
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.4 }}
           />
@@ -779,13 +779,13 @@ export default function EnshiftDigitalLanding() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-8 md:mb-16"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             <motion.h2 
-              className="font-f1 text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
+              className="font-f1 text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
               animate={{
                 textShadow: [
                   "0 0 20px rgba(168, 85, 247, 0.4)",
@@ -797,13 +797,13 @@ export default function EnshiftDigitalLanding() {
             >
               🏆 CONSTRUCTOR'S CHAMPIONSHIP
             </motion.h2>
-            <p className="font-f1 text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+            <p className="font-f1 text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6 md:mb-8 px-4">
               🏁 Leading the championship table across all digital racing categories
-              <br />
-              🚀 Dominating the leaderboard with pole position performance
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>🚀 Dominating the leaderboard with pole position performance
             </p>
             
-            {/* F1 Championship Status Bar with Enhanced Elements */}
+            {/* F1 Championship Status Bar with Enhanced Elements - Already Mobile Responsive */}
             <motion.div 
               className="flex flex-col items-center space-y-4 mb-8"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -916,13 +916,13 @@ export default function EnshiftDigitalLanding() {
             </motion.div>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative">
             {/* Left Column - Scrolls Up */}
-            <motion.div className="space-y-8" style={{ y: leftColumnY }}>
+            <motion.div className="space-y-6 md:space-y-8" style={{ y: leftColumnY }}>
               {achievements.slice(0, 2).map((achievement, index) => (
                 <motion.div
                   key={achievement.title}
-                  className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-purple-500/20 rounded-xl p-8 text-center backdrop-blur-sm hover:border-yellow-400/40 transition-all duration-300 group relative overflow-hidden"
+                  className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-purple-500/20 rounded-xl p-6 md:p-8 text-center backdrop-blur-sm hover:border-yellow-400/40 transition-all duration-300 group relative overflow-hidden"
                   initial={{ opacity: 0, x: -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -943,8 +943,8 @@ export default function EnshiftDigitalLanding() {
                     2.3s
                   </motion.div>
 
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 relative">
-                    <achievement.icon className="h-8 w-8 text-white z-10" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                    <achievement.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white z-10" />
                     {/* Spinning tire effect */}
                     <motion.div 
                       className="absolute inset-0 border-2 border-dashed border-yellow-400/50 rounded-full"
@@ -953,8 +953,8 @@ export default function EnshiftDigitalLanding() {
                     />
                   </div>
                   
-                  <h3 className="font-f1 text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">{achievement.title}</h3>
-                  <p className="font-f1 text-4xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-yellow-400 group-hover:to-red-400 transition-all duration-300">
+                  <h3 className="font-f1 text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">{achievement.title}</h3>
+                  <p className="font-f1 text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-yellow-400 group-hover:to-red-400 transition-all duration-300">
                     {achievement.count}
                   </p>
 
@@ -978,8 +978,8 @@ export default function EnshiftDigitalLanding() {
             </motion.div>
 
             {/* Center Column - Scrolls Normally */}
-            <motion.div className="space-y-8" style={{ y: centerColumnY }}>
-              <div className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-purple-500/20 rounded-xl p-8 backdrop-blur-sm relative overflow-hidden group">
+            <motion.div className="space-y-6 md:space-y-8" style={{ y: centerColumnY }}>
+              <div className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-purple-500/20 rounded-xl p-6 md:p-8 backdrop-blur-sm relative overflow-hidden group">
                 {/* Racing Circuit Background */}
                 <div className="absolute inset-0 opacity-10">
                   <svg viewBox="0 0 200 200" className="w-full h-full">
@@ -1001,13 +1001,13 @@ export default function EnshiftDigitalLanding() {
                   </svg>
                 </div>
 
-                <h3 className="font-f1 text-3xl font-bold text-white mb-6 text-center">🏎️ LIVE TELEMETRY</h3>
-                <p className="font-f1 text-sm text-gray-400 text-center mb-4">Real-time 3D performance monitoring</p>
+                <h3 className="font-f1 text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6 text-center">🏎️ LIVE TELEMETRY</h3>
+                <p className="font-f1 text-xs sm:text-sm text-gray-400 text-center mb-4">Real-time 3D performance monitoring</p>
                 
                 {/* Pit Lane Status */}
-                <div className="flex justify-center mb-4 space-x-4">
+                <div className="flex flex-col sm:flex-row justify-center mb-4 space-y-2 sm:space-y-0 sm:space-x-4">
                   <motion.div 
-                    className="flex items-center space-x-1 text-xs font-f1"
+                    className="flex items-center justify-center sm:justify-start space-x-1 text-xs font-f1"
                     animate={{ opacity: [0.6, 1, 0.6] }}
                     transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                   >
@@ -1015,7 +1015,7 @@ export default function EnshiftDigitalLanding() {
                     <span className="text-green-400">PIT LANE OPEN</span>
                   </motion.div>
                   <motion.div 
-                    className="flex items-center space-x-1 text-xs font-f1"
+                    className="flex items-center justify-center sm:justify-start space-x-1 text-xs font-f1"
                     animate={{ opacity: [0.6, 1, 0.6] }}
                     transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
                   >
@@ -1024,7 +1024,7 @@ export default function EnshiftDigitalLanding() {
                   </motion.div>
                 </div>
 
-                <div className="h-64 relative">
+                <div className="h-48 sm:h-56 md:h-64 relative">
                   <Portfolio3DScene />
                   {/* Speed overlay */}
                   <div className="absolute top-2 left-2 bg-black/60 rounded px-2 py-1 text-xs font-f1">
@@ -1040,8 +1040,8 @@ export default function EnshiftDigitalLanding() {
                   </div>
                 </div>
                 
-                <div className="flex justify-center mt-4 space-x-4 text-xs font-f1">
-                  <span className="text-green-400 flex items-center space-x-1">
+                <div className="flex flex-col sm:flex-row justify-center mt-4 space-y-2 sm:space-y-0 sm:space-x-4 text-xs font-f1">
+                  <span className="text-green-400 flex items-center justify-center sm:justify-start space-x-1">
                     <motion.div 
                       className="w-2 h-2 bg-green-400 rounded-full"
                       animate={{ scale: [0.8, 1.2, 0.8] }}
@@ -1049,7 +1049,7 @@ export default function EnshiftDigitalLanding() {
                     />
                     <span>ENGINE: OPTIMAL</span>
                   </span>
-                  <span className="text-blue-400 flex items-center space-x-1">
+                  <span className="text-blue-400 flex items-center justify-center sm:justify-start space-x-1">
                     <motion.div 
                       className="w-2 h-2 bg-blue-400 rounded-full"
                       animate={{ scale: [0.8, 1.2, 0.8] }}
@@ -1057,7 +1057,7 @@ export default function EnshiftDigitalLanding() {
                     />
                     <span>AERO: BALANCED</span>
                   </span>
-                  <span className="text-purple-400 flex items-center space-x-1">
+                  <span className="text-purple-400 flex items-center justify-center sm:justify-start space-x-1">
                     <motion.div 
                       className="w-2 h-2 bg-purple-400 rounded-full"
                       animate={{ scale: [0.8, 1.2, 0.8] }}
@@ -1070,11 +1070,11 @@ export default function EnshiftDigitalLanding() {
             </motion.div>
 
             {/* Right Column - Scrolls Down */}
-            <motion.div className="space-y-8" style={{ y: rightColumnY }}>
+            <motion.div className="space-y-6 md:space-y-8" style={{ y: rightColumnY }}>
               {achievements.slice(2, 4).map((achievement, index) => (
                 <motion.div
                   key={achievement.title}
-                  className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-purple-500/20 rounded-xl p-8 text-center backdrop-blur-sm hover:border-yellow-400/40 transition-all duration-300 group relative overflow-hidden"
+                  className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-purple-500/20 rounded-xl p-6 md:p-8 text-center backdrop-blur-sm hover:border-yellow-400/40 transition-all duration-300 group relative overflow-hidden"
                   initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -1095,8 +1095,8 @@ export default function EnshiftDigitalLanding() {
                     1:23.456
                   </motion.div>
 
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 relative">
-                    <achievement.icon className="h-8 w-8 text-white z-10" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                    <achievement.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white z-10" />
                     {/* Spinning tire effect - opposite direction */}
                     <motion.div 
                       className="absolute inset-0 border-2 border-dashed border-red-400/50 rounded-full"
@@ -1105,8 +1105,8 @@ export default function EnshiftDigitalLanding() {
                     />
                   </div>
                   
-                  <h3 className="font-f1 text-2xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">{achievement.title}</h3>
-                  <p className="font-f1 text-4xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-red-400 group-hover:to-yellow-400 transition-all duration-300">
+                  <h3 className="font-f1 text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">{achievement.title}</h3>
+                  <p className="font-f1 text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-red-400 group-hover:to-yellow-400 transition-all duration-300">
                     {achievement.count}
                   </p>
 
@@ -1133,7 +1133,7 @@ export default function EnshiftDigitalLanding() {
       </section>
 
       {/* Stats Section */}
-      <section id="stats" className="py-20 relative z-20 overflow-hidden">
+      <section id="stats" className="py-12 md:py-20 relative z-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-purple-950/40 to-black/80 backdrop-blur-sm" />
         
         {/* F1 Racing Grid Background */}
@@ -1168,9 +1168,9 @@ export default function EnshiftDigitalLanding() {
         </div>
 
         {/* F1 Championship Status Lights */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
+        <div className="absolute top-6 md:top-8 left-1/2 transform -translate-x-1/2 flex space-x-2 md:space-x-3">
           <motion.div
-            className="w-4 h-4 rounded-full bg-red-500 border-2 border-red-300"
+            className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-red-500 border-2 border-red-300"
             animate={{ 
               opacity: [1, 0.3, 1],
               boxShadow: [
@@ -1182,7 +1182,7 @@ export default function EnshiftDigitalLanding() {
             transition={{ duration: 1.2, repeat: Number.POSITIVE_INFINITY }}
           />
           <motion.div
-            className="w-4 h-4 rounded-full bg-yellow-500 border-2 border-yellow-300"
+            className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-yellow-500 border-2 border-yellow-300"
             animate={{ 
               opacity: [1, 0.3, 1],
               boxShadow: [
@@ -1194,7 +1194,7 @@ export default function EnshiftDigitalLanding() {
             transition={{ duration: 1.2, repeat: Number.POSITIVE_INFINITY, delay: 0.4 }}
           />
           <motion.div
-            className="w-4 h-4 rounded-full bg-green-500 border-2 border-green-300"
+            className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-green-500 border-2 border-green-300"
             animate={{ 
               opacity: [1, 0.3, 1],
               boxShadow: [
@@ -1212,10 +1212,10 @@ export default function EnshiftDigitalLanding() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8 md:mb-16"
           >
             <motion.h2 
-              className="font-f1 text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
+              className="font-f1 text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-wider"
               animate={{
                 textShadow: [
                   "0 0 20px rgba(168, 85, 247, 0.4)",
@@ -1227,15 +1227,15 @@ export default function EnshiftDigitalLanding() {
             >
               🏆 CONSTRUCTOR CHAMPIONSHIP
             </motion.h2>
-            <p className="font-f1 text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+            <p className="font-f1 text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6 md:mb-8 px-4">
               🏁 Performance metrics that secure our position at the front of the grid
-              <br />
-              ⚡ Data-driven excellence across every racing metric
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>⚡ Data-driven excellence across every racing metric
             </p>
             
             {/* F1 Championship Status Bar */}
             <motion.div 
-              className="flex justify-center items-center space-x-6 text-sm font-f1 bg-black/60 rounded-full px-8 py-4 border border-yellow-400/40 backdrop-blur-sm mb-8"
+              className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6 text-xs sm:text-sm font-f1 bg-black/60 rounded-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4 border border-yellow-400/40 backdrop-blur-sm mb-6 md:mb-8 max-w-5xl mx-auto"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -1243,25 +1243,25 @@ export default function EnshiftDigitalLanding() {
             >
               <div className="flex items-center space-x-2">
                 <motion.div 
-                  className="w-3 h-3 bg-green-400 rounded-full"
+                  className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full"
                   animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
                 />
                 <span className="text-green-400 uppercase tracking-wider">GRID POSITION: P1</span>
               </div>
-              <div className="text-gray-400">|</div>
+              <div className="text-gray-400 hidden sm:block">|</div>
               <div className="flex items-center space-x-2">
                 <motion.div 
-                  className="w-3 h-3 bg-yellow-400 rounded-full"
+                  className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full"
                   animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
                 />
                 <span className="text-yellow-400 uppercase tracking-wider">CHAMPIONSHIP POINTS: 475</span>
               </div>
-              <div className="text-gray-400">|</div>
+              <div className="text-gray-400 hidden lg:block">|</div>
               <div className="flex items-center space-x-2">
                 <motion.div 
-                  className="w-3 h-3 bg-red-400 rounded-full"
+                  className="w-2 h-2 sm:w-3 sm:h-3 bg-red-400 rounded-full"
                   animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
                 />
@@ -1270,7 +1270,7 @@ export default function EnshiftDigitalLanding() {
             </motion.div>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -1289,16 +1289,16 @@ export default function EnshiftDigitalLanding() {
                   transformStyle: "preserve-3d"
                 }}
               >
-                <div className="bg-gradient-to-br from-gray-900/90 to-black/90 border-2 border-purple-500/30 rounded-xl p-6 group-hover:border-yellow-400/60 transition-all duration-300 backdrop-blur-sm relative overflow-hidden">
+                <div className="bg-gradient-to-br from-gray-900/90 to-black/90 border-2 border-purple-500/30 rounded-xl p-4 sm:p-6 group-hover:border-yellow-400/60 transition-all duration-300 backdrop-blur-sm relative overflow-hidden">
                   {/* Racing stripes */}
                   <div className="absolute top-0 left-2 right-2 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded-full" />
                   <div className="absolute bottom-0 left-2 right-2 h-1 bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-400 rounded-full" />
                   
                   {/* Corner racing elements */}
-                  <div className="absolute top-1 left-1 w-3 h-3 border-l-2 border-t-2 border-yellow-400/60" />
-                  <div className="absolute top-1 right-1 w-3 h-3 border-r-2 border-t-2 border-yellow-400/60" />
-                  <div className="absolute bottom-1 left-1 w-3 h-3 border-l-2 border-b-2 border-yellow-400/60" />
-                  <div className="absolute bottom-1 right-1 w-3 h-3 border-r-2 border-b-2 border-yellow-400/60" />
+                  <div className="absolute top-1 left-1 w-2 h-2 sm:w-3 sm:h-3 border-l-2 border-t-2 border-yellow-400/60" />
+                  <div className="absolute top-1 right-1 w-2 h-2 sm:w-3 sm:h-3 border-r-2 border-t-2 border-yellow-400/60" />
+                  <div className="absolute bottom-1 left-1 w-2 h-2 sm:w-3 sm:h-3 border-l-2 border-b-2 border-yellow-400/60" />
+                  <div className="absolute bottom-1 right-1 w-2 h-2 sm:w-3 sm:h-3 border-r-2 border-b-2 border-yellow-400/60" />
 
                   {/* Racing glow effect */}
                   <motion.div 
@@ -1334,13 +1334,13 @@ export default function EnshiftDigitalLanding() {
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 + 0.3, duration: 0.5, type: "spring" }}
-                    className="font-f1 text-4xl md:text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2 mt-6 group-hover:from-yellow-400 group-hover:to-red-400 transition-all duration-300"
+                    className="font-f1 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2 mt-4 sm:mt-6 group-hover:from-yellow-400 group-hover:to-red-400 transition-all duration-300"
                   >
                     {stat.value}
-                    <span className="font-f1 text-2xl md:text-3xl">{stat.unit}</span>
+                    <span className="font-f1 text-xl sm:text-2xl md:text-3xl">{stat.unit}</span>
                   </motion.div>
                   
-                  <p className="font-f1 text-gray-400 font-medium group-hover:text-gray-300 transition-colors mb-4 uppercase tracking-wider">{stat.label}</p>
+                  <p className="font-f1 text-gray-400 font-medium group-hover:text-gray-300 transition-colors mb-3 sm:mb-4 uppercase tracking-wider text-xs sm:text-sm">{stat.label}</p>
 
                   {/* F1-style telemetry data */}
                   <div className="grid grid-cols-2 gap-2 mb-3">
@@ -1358,17 +1358,17 @@ export default function EnshiftDigitalLanding() {
                   <div className="flex items-center justify-between">
                     <div className="flex space-x-1">
                       <motion.div 
-                        className="w-2 h-2 bg-green-400 rounded-full"
+                        className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full"
                         animate={{ opacity: [0.4, 1, 0.4] }}
                         transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
                       />
                       <motion.div 
-                        className="w-2 h-2 bg-yellow-400 rounded-full"
+                        className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full"
                         animate={{ opacity: [0.4, 1, 0.4] }}
                         transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.3 }}
                       />
                       <motion.div 
-                        className="w-2 h-2 bg-red-400 rounded-full"
+                        className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full"
                         animate={{ opacity: [0.4, 1, 0.4] }}
                         transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: 0.6 }}
                       />
@@ -1398,7 +1398,7 @@ export default function EnshiftDigitalLanding() {
                 {/* Racing sparks effect on hover */}
                 <AnimatePresence>
                   <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-6 pointer-events-none"
+                    className="absolute bottom-0 left-0 right-0 h-4 sm:h-6 pointer-events-none"
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -1428,30 +1428,30 @@ export default function EnshiftDigitalLanding() {
 
           {/* F1 Championship Leaderboard */}
           <motion.div 
-            className="relative z-10 max-w-4xl mx-auto mt-16"
+            className="relative z-10 max-w-4xl mx-auto mt-12 md:mt-16"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.8 }}
           >
-            <div className="bg-black/60 rounded-2xl p-8 border border-yellow-400/30 backdrop-blur-sm">
-              <div className="text-center mb-6">
-                <h3 className="font-f1 text-2xl font-bold text-white mb-2">🏁 FINAL CHAMPIONSHIP STANDINGS</h3>
-                <p className="font-f1 text-sm text-gray-400">Season 2024 - Constructor Championship Results</p>
+            <div className="bg-black/60 rounded-2xl p-6 md:p-8 border border-yellow-400/30 backdrop-blur-sm">
+              <div className="text-center mb-4 md:mb-6">
+                <h3 className="font-f1 text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">🏁 FINAL CHAMPIONSHIP STANDINGS</h3>
+                <p className="font-f1 text-xs sm:text-sm text-gray-400">Season 2024 - Constructor Championship Results</p>
               </div>
               
               <div className="flex justify-center">
-                <div className="bg-black/60 rounded-full px-12 py-6 border border-yellow-400/40 backdrop-blur-sm">
-                  <div className="flex items-center space-x-8 font-f1 text-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-4 h-4 bg-yellow-400 rounded-full animate-pulse" />
+                <div className="bg-black/60 rounded-full px-6 sm:px-8 lg:px-12 py-4 sm:py-6 border border-yellow-400/40 backdrop-blur-sm">
+                  <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-8 font-f1 text-sm sm:text-base lg:text-lg">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-yellow-400 rounded-full animate-pulse" />
                       <span className="text-yellow-400 font-bold uppercase tracking-wider">🏆 P1: ENSHIFT RACING</span>
                     </div>
-                    <div className="text-gray-400">|</div>
+                    <div className="text-gray-400 hidden sm:block">|</div>
                     <div className="text-white font-bold">
                       475 POINTS
                     </div>
-                    <div className="text-gray-400">|</div>
+                    <div className="text-gray-400 hidden lg:block">|</div>
                     <div className="text-green-400 uppercase tracking-wider font-bold">
                       CHAMPIONS 👑
                     </div>
